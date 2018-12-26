@@ -99,3 +99,31 @@ Additionally, keystone should have following endpoints because CEPH object pool 
 ```
 
 If it works, the files will be stored at the container created for the tenant simalarly the object pool located at the CEPH cluster.
+
+
+
+# How to enable uploading big files
+There is a documentation describing how to allow users to upload big files such a few GB in the following link;
+https://doc.owncloud.org/server/10.0/admin_manual/configuration/files/big_file_upload_configuration.html
+
+```
+ upload_max_filesize=4G
+ post_max_size=4G
+ max_input_time 3600
+ max_execution_time 3600
+```
+These are the metrics should be properly set within the .user.ini and .htaccess files. After that a user is able to upload a big file directly to the owncloud server without using nginx proxy. If you are sure that it works well, nginx proxy should also be updated. Otherwise, it will raise the gateway time out problem in the web interface. Additionally, the following error message appears in the nginx log file.
+
+ upstream timed out (110: Operation timed out) while reading response header from upstream
+ 
+There are a number of solutions presented in the web by editing the nginx.conf. I had to apply a few of them together to resolve the problem. Adding properly following lines into nginx.conf might resolve the mentioned problem.
+
+ gzip  on;
+ client_max_body_size 4192m;
+ 
+ location / {
+  proxy_http_version 1.1;
+  proxy_set_header Connection "";
+  proxy_read_timeout 3600;
+  fastcgi_read_timeout 240;
+ }
