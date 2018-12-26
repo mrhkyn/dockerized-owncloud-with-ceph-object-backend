@@ -118,6 +118,7 @@ These are the metrics should be properly set within the .user.ini and .htaccess 
  
 There are a number of solutions presented in the web by editing the nginx.conf. I had to apply a few of them together to resolve the problem. Adding properly following lines into nginx.conf might resolve the mentioned problem.
 
+```
  gzip  on;
  client_max_body_size 4192m;
  
@@ -127,3 +128,4 @@ There are a number of solutions presented in the web by editing the nginx.conf. 
   proxy_read_timeout 3600;
   fastcgi_read_timeout 240;
  }
+```
